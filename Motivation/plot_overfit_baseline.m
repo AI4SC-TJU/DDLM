@@ -3,13 +3,16 @@
 
 format short e
 close all
-path = 'D:\博士研究生\研二\Prj22-DDLM-V1-Code\main-DNLM-PINN\Codes\Results\Overfit\Dirichlet\2D-squaure\epoch5k\simulation-3';
-savepath = 'D:\博士研究生\研二\Prj22-DDLM-V1-Code\main-DNLM-PINN\Figures\Overfit\Dirichlet\2D-squaure\simulation-1e4-2\';
+% set the load path and the save path
+path = 'D:\Prj22-DDLM-V1-Code\main-DNLM-PINN\Codes\Results\Overfit\Dirichlet\2D-squaure\epoch5k\simulation-3';
+savepath = 'D:\Prj22-DDLM-V1-Code\main-DNLM-PINN\Figures\Overfit\Dirichlet\2D-squaure\simulation-1e4-2\';
 if(exist(savepath,'dir')~=7)
     mkdir(savepath);
 end
+% set the name of the figure
 boundary = '-Dirichlet-overfit';
 algorithm = 'PINN-e1w';
+% choose the data of first step to plot
 index = '1';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % problem setting
@@ -70,26 +73,9 @@ set(h,'Fontsize',25)
 set(h,'LineWidth',2)
 set(gcf,'color','w')
 axis off
+% save the figure
 savefile = strcat(strcat(strcat(strcat(strcat(strcat('fig',boundary),'-'),algorithm),'-u-exact-'),index),'.png');
 saveas(gcf,strcat(savepath,savefile));
-% inlarge = axes(fig);
-% inlarge.Position = [0.6 0.5 0.15 0.4];
-% 
-% area = [0.3 0.2 0.5 0.8];
-% panpos = inlarge.Position;
-% %delete(inlarge);
-% [V_mesh, qx, qy, dx, dy] = generate_mesh(0, 1, 0, 1, num_pts);
-% u_exact = U(V_mesh(1,:),V_mesh(2,:));
-% Ft = TriScatteredInterp(V_mesh(1,:)',V_mesh(2,:)',u_exact');
-% qz = Ft(qx,qy);
-% inlarge = zoomin(ax,area,panpos);
-% title(inlarge,'Zoom in')
-% h=colorbar('manual');
-% set(h,'Position',[0.8,0.51,0.01,0.38])
-% set(h,'Fontsize',25)
-% set(h,'LineWidth',2)
-% set(gcf,'color','w')
-% axis off
 %---------------------%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Network predict solution final over entire domain
@@ -595,68 +581,17 @@ savefile = strcat(strcat(strcat(strcat(strcat(strcat('fig',boundary),'-'),algori
 saveas(gcf,strcat(savepath,savefile));
 %---------------------%
 function [V_mesh, qx, qy, dx, dy] = generate_mesh(left, right, bottom, top, num_pts)
-
 format short e
-
 % original mesh
 mesh_x = linspace(left, right, num_pts);
 mesh_y = linspace(bottom, top, num_pts);
 % mesh_x = linspace(right, left, num_pts);
 % mesh_y = linspace(top, bottom, num_pts);
 [mesh_x,mesh_y] = meshgrid(mesh_x,mesh_y);
-
 V_mesh(1,:) = reshape(mesh_x,1,[]);
 V_mesh(2,:) = reshape(mesh_y,1,[]);
-
 % interpolate mesh
 dx = left:0.002:right;
 dy = bottom:0.002:top;
 [qx,qy] = meshgrid(dx,dy);
-
-end
-
-function pan = zoomin(ax,areaToMagnify,panPosition,dx,dy,qz)
-% AX is a handle to the axes to magnify
-% AREATOMAGNIFY is the area to magnify, given by a 4-element vector that defines the
-%      lower-left and upper-right corners of a rectangle [x1 y1 x2 y2]
-% PANPOSTION is the position of the magnifying pan in the figure, defined by
-%        the normalized units of the figure [x y w h]
-%
-
-fig = ax.Parent;
-pan = copyobj(ax,fig);
-if nargin == 6
-    axis off
-    axes4 = axes(fig);
-    imagesc(axes4,dx,dy,qz);
-    axis off
-    axes4.Position = panPosition;
-end
-pan.Position = panPosition;
-pan.XLim = areaToMagnify([1 3]);
-pan.YLim = areaToMagnify([2 4]);
-pan.XTick = [];
-pan.YTick = [];
-rectangle(ax,'Position',...
-    [areaToMagnify(1:2) areaToMagnify(3:4)-areaToMagnify(1:2)])
-xy = ax2annot(ax,areaToMagnify([1 4;3 2]));
-annotation(fig,'line',[xy(1,1) panPosition(1)],...
-    [xy(1,2) panPosition(2)+panPosition(4)],'Color','k')
-annotation(fig,'line',[xy(2,1) panPosition(1)+panPosition(3)],...
-    [xy(2,2) panPosition(2)],'Color','k')
-end
-
-function anxy = ax2annot(ax,xy)
-% This function converts the axis unites to the figure normalized unites
-% AX is a handle to the figure
-% XY is a n-by-2 matrix, where the first column is the x values and the
-% second is the y values
-% ANXY is a matrix in the same size of XY, but with all the values
-% converted to normalized units
-
-pos = ax.Position;
-%   white area * ((value - axis min) / axis length)   + gray area
-normx = pos(3)*((xy(:,1)-ax.XLim(1))./(ax.XLim(2)-ax.XLim(1)))+ pos(1);
-normy = pos(4)*((xy(:,2)-ax.YLim(1))./(ax.YLim(2)-ax.YLim(1)))+ pos(2);
-anxy = [normx normy];
 end
