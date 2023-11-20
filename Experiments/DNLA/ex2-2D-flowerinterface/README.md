@@ -1,12 +1,12 @@
-# Instructions for Generating Table 7 in Our Revised Manuscript
+# Instructions for Generating Table 6 in Our Revised Manuscript
 ## Table 6 - DN-PINNs Result
-To acquire the data represented in the first row of Table 7, execute the script `DN-PINNs-2prob-2D-flower.py`.
+To acquire the data represented in the first row of Table 6, execute the script `DN-PINNs-2prob-2D-flower.py`.
 
 ## Table 6 - DNLM(PINN) Result
-For the results displayed in the Table 7, execute the script `DNLM-2prob-2D-Compensent-flower.py` to generate the corresponding data.
+For the results displayed in the Table 6, execute the script `DNLM-2prob-2D-Compensent-flower.py` to generate the corresponding data.
 
 ## Table 6 - DNLM(Ritz) Result
-For the data displayed in the Table 7, execute the script `DNLM-2prob-2D-Compensent-Ritz-flower.py` to generate the corresponding results.
+For the data displayed in the Table 6, execute the script `DNLM-2prob-2D-Compensent-Ritz-flower.py` to generate the corresponding results.
 
 ## Figure Generation:
 Utilize MATLAB and execute the script `plot_Solutions_1by1_flower.m` to create the graphical representation associated with the data obtained from the previous steps.
