@@ -1,6 +1,6 @@
 # Instructions for Generating Table 8 in Our Revised Manuscript
 ## Table 8 - DN-PINNs Result
-To acquire the data represented in the first row of Table 8, execute the script `DN-PINNs-2prob-5D-flower.py`.
+To acquire the data represented in the first row of Table 8, execute the script `DN-PINNs-2prob-5D.py`.
 
 ## Table 8 - DNLM(PINN) Result
 For the results displayed in the Table 8, execute the script `DNLM-2prob-5D-Compensent.py` to generate the corresponding data.
