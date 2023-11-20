@@ -198,6 +198,7 @@ while((ite_index < args.max_ite_num)):
     gradu_x_Exact = test_smppts.Gradu_x_Exact_SmpPts.reshape(-1,1).to(device)
     gradu_y_Exact = test_smppts.Gradu_y_Exact_SmpPts.reshape(-1,1).to(device)
     grad_u_Exact = torch.cat([gradu_x_Exact,gradu_y_Exact],dim=1).detach().cpu().numpy()
+    # check if the stop criteria is satisfied
     if torch.norm(g_left - g_left_temp).item()/torch.norm(g_left_temp).item() < args.tol:
         break
     if (torch.norm(u_left_temp - u_NN_left).item()/torch.norm(u_NN_left).item()< args.tol) or (torch.norm(u_right_temp - u_NN_right).item()/torch.norm(u_NN_right).item() < args.tol):
