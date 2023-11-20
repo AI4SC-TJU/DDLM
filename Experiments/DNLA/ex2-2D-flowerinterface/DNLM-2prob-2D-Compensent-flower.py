@@ -58,6 +58,9 @@ parser.add_argument('--dim_prob', type=int, default=2, help='dimension of the su
 parser.add_argument('--theta', type=float, default=0.5, help='relaxation parameter')
 parser.add_argument('--lr', type=float, default=0.001, help='learning rate')
 parser.add_argument('--Gamma', type=float, default=0.1, help='decay learning rate')
+# set the stop criteria
+parser.add_argument('--tol', type=float, default=0.01, help='tolerance of stopping criteria')
+
 args = parser.parse_args()
 ##############################################################################################
 ## problem setting
@@ -146,6 +149,12 @@ if not os.path.exists(File_Path):
 # prepare testing data over the entire domain
 
 ##############################################################################################
+testdata_in = Testdata(args.num_test_pts, 1, args.alpha_R, args.alpha_B, dim_prob)
+testdata_out = Testdata(args.num_test_pts, 2, args.alpha_R, args.alpha_B, dim_prob)
+
+Smppts_in = testdata_in.SmpPts_Test.to(device)
+Smppts_out = testdata_out.SmpPts_Test.to(device)
+
 ##############################################################################################
 # step 1. generate initial guess of interface condition (in subproblem)
 ## ----------------------------- ##
@@ -156,6 +165,9 @@ h_diff = SmpPts_Intfc[:,0] * (SmpPts_Intfc[:,0] - 1) * (SmpPts_Intfc[:,1]) * (Sm
 g_in = h_exact - 1000*h_diff.reshape(-1,1)
 
 g_in = g_in.reshape(-1,1).to(device).detach()
+
+u_in = Exact_Solution_radius.u_Exact(Smppts_in, args.alpha_R, args.alpha_B, 1).reshape(-1,1)
+u_out = Exact_Solution_radius.u_Exact(Smppts_out, args.alpha_R, args.alpha_B, 2).reshape(-1,1)
 
 traindata_bndry_G.g_SmpPts = g_in
 # step 2. loop over DDM outer iterations
@@ -169,28 +181,31 @@ logger.set_names(['ite_index', 'error_L2', 'error_H1', 'time'])
 since = time.time()
 SmpPts_Intfc = SmpPts_Intfc.to(device)
 ite_index = 1
-while((ite_index < args.max_ite_num)):
-    # in subproblem-solving
 
+while((ite_index < args.max_ite_num)):
+    # inner subproblem-solving
     args.beta = 1000
     errorL2_in, errorH1_in, model_in = DirichletSolverPINNflower2d(args, traindata_bndry_G, dataloader_bndry_G, SmpPts_Intfc, ite_index, 1)
-    # torch.save(model_in.state_dict(), "mode.pth")
-    # update Robin boundary condition for out subproblem
-    # out subproblem-solving
-    '''
-    model_in = FcNet.FcNet(dim_prob,args.width, 1, args.depth)
-    model_in.load_state_dict(torch.load("mode.pth"))
-    model_in = model_in.to(device)
-    '''
-
+    # outer subproblem-solving
     args.beta = 1000 * args.alpha_B
     errorL2_out, errorH1_out, model_out = CompensentedSolverflower2d(args, dataloader_bndry_G,  model_in, ite_index, 2)
-    # update Robin boundary condition for in subproblem
+    # update Dirichlet boundary condition for inner subproblem
     g_in_temp =  model_out(SmpPts_Intfc)
+    u_in_temp = model_in(Smppts_in)
+    u_out_temp = model_out(Smppts_out)
+
+    # check if the stop criteria is satisfied
+    if torch.norm(g_in - g_in_temp).item()/torch.norm(g_in_temp).item() < args.tol:
+        break
+    if (torch.norm(u_in_temp - u_in).item()/torch.norm(u_in).item()< args.tol) or (torch.norm(u_out_temp - u_out).item()/torch.norm(u_out_temp).item() < args.tol):
+        break 
+
     g_in = args.theta * g_in_temp + (1-args.theta) * g_in
     g_in = g_in.detach()
+    u_in = u_in_temp
+    u_out = u_out_temp
     traindata_bndry_G.g_SmpPts = g_in
-    # compute testing errors over entire domain
+    # save the testing errors over entire domain
 
     time_elapse = time.time()
     time_ite = time_elapse - since
@@ -200,8 +215,8 @@ while((ite_index < args.max_ite_num)):
     logger.append([ite_index, errorL2, errorH1, time_ite])
     ErrL2.append(errorL2.item())
     ErrH1.append(errorH1.item())
-    torch.save(model_in.state_dict(), args.result + "/mode_in_DN-PINNS_circle_c1=1_c2=1-%d.pth"%ite_index)
-    torch.save(model_out.state_dict(), args.result + "/mode_out_DN-PINNS_circle_c1=1_c2=1-%d.pth"%ite_index)
+    torch.save(model_in.state_dict(), args.result + "/mode_in_DNLM(PINN)_flower_c1=1_c2=1-%d.pth"%ite_index)
+    torch.save(model_out.state_dict(), args.result + "/mode_out_DNLM(PINN)_flower_c1=1_c2=1-%d.pth"%ite_index)
     ite_index += 1
   
 
