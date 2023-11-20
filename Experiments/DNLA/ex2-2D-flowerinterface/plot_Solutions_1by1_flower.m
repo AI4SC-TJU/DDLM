@@ -1,10 +1,12 @@
-%plot_Solutions_1by1_Zigzag.m
-% plot figures one by one
+%plot_Solutions_1by1_flower.m
+% plot figures one by one with flower-interface
 
 format short e
 close all
-path = 'D:\博士研究生\研二\highcontrast-20221202\Results\2_2Prob-2D-flower\Compensent\PINN\R=1-B=1\simulation-1\';
-savepath = 'D:\博士研究生\研二\highcontrast-20221202\figures\2_2Prob-2D-flower\Compensent\Ritz\R=1-B=1\simulation-1\';
+% set the load path and save path
+path = 'D:\Results\2_2Prob-2D-flower\Compensent\PINN\R=1-B=1\simulation-1\';
+savepath = 'D:\figures\2_2Prob-2D-flower\Compensent\Ritz\R=1-B=1\simulation-1\';
+% set the file name
 savename = 'fig-DN-ex2f-';
 algorithm = 'DNLM-DeepRitz-';
 if(exist(savepath,'dir')~=7)
@@ -15,7 +17,6 @@ index = '13';
 % problem setting
 num_pts = 100;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 load('flower-quarter-fig.mat')
 T_flower_in = elem +1;
 V_flower_in = node;
