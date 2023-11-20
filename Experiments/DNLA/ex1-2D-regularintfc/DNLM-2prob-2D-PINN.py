@@ -49,13 +49,11 @@ parser.add_argument('--num_bndry_pts_D', type=int, default=5000, help='total num
 parser.add_argument('--num_bndry_pts_G', type=int, default=5000, help='total number of sampling points at intefae')
 parser.add_argument('--num_test_pts', type=int, default=100, help='number of sampling points for each dimension during testing')
 
-# Robin-Robin algorithm setting    
-parser.add_argument('--alpha_left', type=float, default=1, help='alpha of the left subproblem')
-parser.add_argument('--alpha_right', type=float, default=0.01, help='alpha of the right subproblem')
+# Dirichlet-Neumann algorithm setting    
 parser.add_argument('--max_ite_num', type=int, default=30, help='maximum number of outer iterations')
 parser.add_argument('--rate_decay', type=float, default=0.5, help='the initial learning rate')
 # Stopping criteria
-parser.add_argument('--tol', type=float, default=0.001, help='tolerance of stopping criteria')
+parser.add_argument('--tol', type=float, default=0.01, help='tolerance of stopping criteria')
 args = parser.parse_args()
 ##############################################################################################
 ## problem setting
@@ -162,10 +160,6 @@ while((ite_index < args.max_ite_num)):
     # left subproblem-solving
 
     model_left, error_L2_left, error_H1_left = DirichletSolverPINN(args, traindata_bndry_G, dataloader_bndry_G, ite_index, 1)
-    '''
-    model_left.load_state_dict(torch.load("Results/1_2Prob-2Dcos/DN-PINNs/G1e_2-N2e4-baseline/simulation-1/model_ite-1-1.pth"))
-    model_left.eval()
-    '''
 
     model_right, error_L2_right, error_H1_right = NeumannSolverPINN(args, traindata_bndry_G, dataloader_bndry_G, model_left, ite_index, 2)
     # update Robin boundary condition for left subproblem
@@ -211,6 +205,8 @@ while((ite_index < args.max_ite_num)):
 
     if torch.norm(g_left - g_left_temp).item()/torch.norm(g_left_temp).item() < args.tol:
         break
+    if (torch.norm(u_left_temp - u_NN_left).item()/torch.norm(u_NN_left).item()< args.tol) and (torch.norm(u_right_temp - u_NN_right).item()/torch.norm(u_NN_right).item() < args.tol):
+        break 
     g_left = 1/2 * g_left_temp + (1-1/2) * g_left
     g_left = g_left.detach()
     u_left_temp = u_NN_left
