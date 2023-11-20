@@ -198,7 +198,7 @@ while((ite_index < args.max_ite_num)):
     # Black subproblem-solving
 
     model_B, error_L2_B, error_H1_B = CompensentSolverB(args, model_R, ite_index, u_cross, sub_dom='B')
-    # update Dirichlet boundary condition for South-East and North-West subproblem
+
     # compute testing errors over entire domain
     error_L2 = float(error_L2_R + error_L2_B)
     error_H1 = float(error_H1_R + error_H1_B)
