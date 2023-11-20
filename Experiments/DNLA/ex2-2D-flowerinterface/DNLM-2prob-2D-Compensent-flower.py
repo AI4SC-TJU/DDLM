@@ -189,6 +189,21 @@ while((ite_index < args.max_ite_num)):
     # outer subproblem-solving
     args.beta = 1000 * args.alpha_B
     errorL2_out, errorH1_out, model_out = CompensentedSolverflower2d(args, dataloader_bndry_G,  model_in, ite_index, 2)
+    
+    # save the testing errors over entire domain
+
+    time_elapse = time.time()
+    time_ite = time_elapse - since
+    since = time_elapse
+    errorL2 = errorL2_in + errorL2_out
+    errorH1 = errorH1_in + errorH1_out
+    logger.append([ite_index, errorL2, errorH1, time_ite])
+    ErrL2.append(errorL2.item())
+    ErrH1.append(errorH1.item())
+    torch.save(model_in.state_dict(), args.result + "/mode_in_DNLM(PINN)_flower_c1=1_c2=1-%d.pth"%ite_index)
+    torch.save(model_out.state_dict(), args.result + "/mode_out_DNLM(PINN)_flower_c1=1_c2=1-%d.pth"%ite_index)
+    
+    
     # update Dirichlet boundary condition for inner subproblem
     g_in_temp =  model_out(SmpPts_Intfc)
     u_in_temp = model_in(Smppts_in)
@@ -205,18 +220,7 @@ while((ite_index < args.max_ite_num)):
     u_in = u_in_temp
     u_out = u_out_temp
     traindata_bndry_G.g_SmpPts = g_in
-    # save the testing errors over entire domain
 
-    time_elapse = time.time()
-    time_ite = time_elapse - since
-    since = time_elapse
-    errorL2 = errorL2_in + errorL2_out
-    errorH1 = errorH1_in + errorH1_out
-    logger.append([ite_index, errorL2, errorH1, time_ite])
-    ErrL2.append(errorL2.item())
-    ErrH1.append(errorH1.item())
-    torch.save(model_in.state_dict(), args.result + "/mode_in_DNLM(PINN)_flower_c1=1_c2=1-%d.pth"%ite_index)
-    torch.save(model_out.state_dict(), args.result + "/mode_out_DNLM(PINN)_flower_c1=1_c2=1-%d.pth"%ite_index)
     ite_index += 1
   
 
