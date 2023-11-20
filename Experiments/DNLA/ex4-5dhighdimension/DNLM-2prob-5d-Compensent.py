@@ -33,7 +33,7 @@ parser = argparse.ArgumentParser(description='DNLM(PINN) method for 5d Poisson p
 parser.add_argument('-r', '--result', default='Results/4_2Prob-5D/DNLM(PINN)/G1e_2-N2e4-baseline/simulation-test', type=str, metavar='PATH', help='path to save checkpoint')
 
 # optimization options
-parser.add_argument('--num_epochs', default=2000, type=int, metavar='N', help='number of total epochs to run')
+parser.add_argument('--num_epochs', default=1, type=int, metavar='N', help='number of total epochs to run')
 parser.add_argument('--beta', default=400, type=int, metavar='N', help='penalty coefficeint for mismatching of boundary data')
 parser.add_argument('--milestones', type=int, nargs='+', default=[600, 1500], help='decrease learning rate at these epochs')
 parser.add_argument('--num_batches', default=5, type=int, metavar='N',help='number of mini-batches during training')
@@ -50,8 +50,10 @@ parser.add_argument('--num_test_pts', type=int, default=10, help='number of samp
 
 # Dirichlet-Neumann algorithm setting    
 
-parser.add_argument('--max_ite_num', type=int, default=3, help='maximum number of outer iterations')
+parser.add_argument('--max_ite_num', type=int, default=15, help='maximum number of outer iterations')
 parser.add_argument('--dim_prob', type=int, default=5, help='dimension of the sub-problem to be solved')
+# set the stop criteria
+parser.add_argument('--tol', type=float, default=0.01, help='tolerance of stopping criteria')
 
 args = parser.parse_args()
 ##############################################################################################
@@ -103,8 +105,16 @@ SmpPts_Intfc = traindata_bndry_G.SmpPts_Bndry_G.to(device)
 
 
 # prepare testing data over the entire domain
-## ----------------------------- ##
-#test_smppts = Testdata(args.num_test_pts,0,dim_prob)
+
+##############################################################################################
+testdata_left = Testdata(args.num_test_pts, 1)
+testdata_right = Testdata(args.num_test_pts, 2)
+
+Smppts_left = testdata_left.SmpPts_Test.to(device)
+Smppts_right = testdata_right.SmpPts_Test.to(device)
+
+
+
 ##############################################################################################
 
 File_Path = args.result
@@ -124,6 +134,9 @@ g_left = h_exact - 5000*h_diff.reshape(-1,1)
 g_left = g_left.reshape(-1,1)
 traindata_bndry_G.g_1_smppts = g_left
 
+u_left = Exact_Solutionplus.u_Exact_Square10D(Smppts_left, dim_prob).reshape(-1,1)
+u_right = Exact_Solutionplus.u_Exact_Square10D(Smppts_right, dim_prob).reshape(-1,1)
+
 # step 2. loop over DDM outer iterations
 ## ----------------------------- ##
 ErrL2 = [] 
@@ -134,6 +147,7 @@ logger.set_names(['ite_index', 'error_L2', 'error_H1', 'time'])
 
 since = time.time()
 time_ite = since
+
 ite_index = 1
 while((ite_index < args.max_ite_num)):
 
@@ -143,11 +157,6 @@ while((ite_index < args.max_ite_num)):
     # right subproblem-solving
 
     model_right, error_L2_right, error_H1_right = CompensentSolver(args, model_left, ite_index, 2)
-    # update Robin boundary condition for left subproblem
-    g_left_temp =  model_right(SmpPts_Intfc)
-    g_left = 1/2 * g_left_temp + (1-1/2) * g_left
-    g_left = g_left.detach()
-    traindata_bndry_G.g_1_smppts = g_left
     # compute testing errors over entire domain
     error_L2 = float(error_L2_left + error_L2_right)
     error_H1 = float(error_H1_left + error_H1_right)
@@ -158,7 +167,24 @@ while((ite_index < args.max_ite_num)):
     training_time =time_temp - time_ite
     time_ite = time_temp
     logger.append([ite_index,error_L2,error_H1,training_time])
+    
 
+    # check if the stop criteria is satisfied
+    g_left_temp =  model_right(SmpPts_Intfc)
+    u_left_temp = model_left(Smppts_left)
+    u_right_temp = model_right(Smppts_right)
+    if torch.norm(g_left - g_left_temp).item()/torch.norm(g_left_temp).item() < args.tol:
+        break
+    if (torch.norm(u_left_temp - u_left).item()/torch.norm(u_left).item()< args.tol) or (torch.norm(u_right_temp - u_right).item()/torch.norm(u_right_temp).item() < args.tol):
+        break 
+
+    # update Dirichlet boundary condition for left subproblem
+    g_left_temp =  model_right(SmpPts_Intfc)
+    g_left = 1/2 * g_left_temp + (1-1/2) * g_left
+    g_left = g_left.detach()
+    u_left = u_left_temp
+    u_right = u_right_temp
+    traindata_bndry_G.g_1_smppts = g_left
     ite_index += 1
 
 
