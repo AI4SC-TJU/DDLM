@@ -49,11 +49,10 @@ parser.add_argument('--num_bndry_pts_D', type=int, default=5000, help='total num
 parser.add_argument('--num_bndry_pts_G', type=int, default=5000, help='total number of sampling points at intefae')
 parser.add_argument('--num_test_pts', type=int, default=100, help='number of sampling points for each dimension during testing')
 
-# Robin-Robin algorithm setting    
-parser.add_argument('--alpha_left', type=float, default=1, help='alpha of the left subproblem')
-parser.add_argument('--alpha_right', type=float, default=0.01, help='alpha of the right subproblem')
+# Dirichlet-Neumann algorithm setting    
 parser.add_argument('--max_ite_num', type=int, default=15, help='maximum number of outer iterations')
-
+# Stopping criteria
+parser.add_argument('--tol', type=float, default=0.001, help='tolerance of stopping criteria')
 args = parser.parse_args()
 ##############################################################################################
 ## problem setting
