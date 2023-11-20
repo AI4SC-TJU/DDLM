@@ -52,7 +52,7 @@ parser.add_argument('--num_test_pts', type=int, default=100, help='number of sam
 # Dirichlet-Neumann algorithm setting    
 parser.add_argument('--max_ite_num', type=int, default=15, help='maximum number of outer iterations')
 # Stopping criteria
-parser.add_argument('--tol', type=float, default=0.001, help='tolerance of stopping criteria')
+parser.add_argument('--tol', type=float, default=0.01, help='tolerance of stopping criteria')
 args = parser.parse_args()
 ##############################################################################################
 ## problem setting
