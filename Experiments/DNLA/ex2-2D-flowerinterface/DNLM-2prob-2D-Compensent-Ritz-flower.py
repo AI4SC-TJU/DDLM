@@ -188,10 +188,8 @@ while((ite_index < args.max_ite_num)):
     # outer subproblem-solving
     args.beta = 1000 * args.alpha_B
     errorL2_out, errorH1_out, model_out = CompensentedSolverflower2d(args, dataloader_bndry_G,  model_in, ite_index, 2)
-    # update Dirichlet boundary condition for inner subproblem
-    g_in_temp =  model_out(SmpPts_Intfc)
-    u_in_temp = model_in(Smppts_in)
-    u_out_temp = model_out(Smppts_out)
+    
+
     # save the testing errors over entire domain
     time_elapse = time.time()
     time_ite = time_elapse - since
@@ -204,12 +202,17 @@ while((ite_index < args.max_ite_num)):
     torch.save(model_in.state_dict(), args.result + "/mode_in_DNLM(Ritz)_flower_c1=1_c2=1-%d.pth"%ite_index)
     torch.save(model_out.state_dict(), args.result + "/mode_out_DNLM(Ritz)_flower_c1=1_c2=1-%d.pth"%ite_index)
     
+    
     # check if the stop criteria is satisfied
+    g_in_temp =  model_out(SmpPts_Intfc)
+    u_in_temp = model_in(Smppts_in)
+    u_out_temp = model_out(Smppts_out)
+    
     if torch.norm(g_in - g_in_temp).item()/torch.norm(g_in_temp).item() < args.tol:
         break
     if (torch.norm(u_in_temp - u_in).item()/torch.norm(u_in).item()< args.tol) or (torch.norm(u_out_temp - u_out).item()/torch.norm(u_out_temp).item() < args.tol):
         break 
-
+    # update Dirichlet boundary condition for inner subproblem
     g_in = args.theta * g_in_temp + (1-args.theta) * g_in
     g_in = g_in.detach()
     u_in = u_in_temp
