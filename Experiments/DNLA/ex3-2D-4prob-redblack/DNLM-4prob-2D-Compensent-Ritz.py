@@ -53,6 +53,8 @@ parser.add_argument('--alpha_R', type=float, default=1, help='alpha of the left 
 parser.add_argument('--alpha_B', type=float, default=1, help='alpha of the right subproblem')
 parser.add_argument('--max_ite_num', type=int, default=21, help='maximum number of outer iterations')
 parser.add_argument('--learning_rate', type=float, default=0.001, help='the initial learning rate')
+# set the stop criteria
+parser.add_argument('--tol', type=float, default=0.01, help='tolerance of stopping criteria')
 args = parser.parse_known_args()[0]
 
 File_Path = args.result
@@ -124,6 +126,9 @@ SmpPts_Intfc_2 = traindata_bndry_G_2.SmpPts_Bndry_G.to(device)
 SmpPts_Intfc_3 = traindata_bndry_G_3.SmpPts_Bndry_G.to(device)     
 SmpPts_Intfc_4 = traindata_bndry_G_4.SmpPts_Bndry_G.to(device)     
 
+# prepare testing data for checking stop criteria
+Smppts_test_R = Testdata(args.num_test_pts, 1).SmpPts_Test.to(device)
+Smppts_test_B = Testdata(args.num_test_pts, 2).SmpPts_Test.to(device)
 
 ##############################################################################################
 
@@ -164,6 +169,9 @@ traindata_bndry_G_2.g_1_SmpPts = g_2.detach()
 traindata_bndry_G_3.g_1_SmpPts = g_3.detach()
 traindata_bndry_G_4.g_1_SmpPts = g_4.detach()
 
+u_R = Exact_Solution.u_Exact_Square2D(Smppts_test_R[:,0], Smppts_test_R[:,1]).reshape(-1,1)
+u_B = Exact_Solution.u_Exact_Square2D(Smppts_test_B[:,0], Smppts_test_B[:,1]).reshape(-1,1)
+
 u_cross = u_cross.detach()
 
 # step 2. loop over DDM outer iterations
@@ -177,6 +185,7 @@ logger.set_names(['ite_index', 'error_L2', 'error_H1', 'time'])
 since = time.time()
 time_ite = since
 ite_index = 1
+
 while((ite_index < args.max_ite_num)):
 
     # Red subproblem-solving
@@ -190,26 +199,6 @@ while((ite_index < args.max_ite_num)):
 
     model_B, error_L2_B, error_H1_B = CompensentSolverB(args, model_R, ite_index, u_cross, sub_dom='B')
     # update Dirichlet boundary condition for South-East and North-West subproblem
-    g_1_temp =  model_B(SmpPts_Intfc_1)
-    g_2_temp =  model_B(SmpPts_Intfc_2)
-    g_3_temp =  model_B(SmpPts_Intfc_3)
-    g_4_temp =  model_B(SmpPts_Intfc_4)
-        
-    g_1 = 1/2 * g_1_temp + (1-1/2) * g_1
-    g_2 = 1/2 * g_2_temp + (1-1/2) * g_2
-    g_3 = 1/2 * g_3_temp + (1-1/2) * g_3
-    g_4 = 1/2 * g_4_temp + (1-1/2) * g_4
-    g_1 = g_1.detach()
-    g_2 = g_2.detach()
-    g_3 = g_3.detach()
-    g_4 = g_4.detach()
-    u_cross = model_B(cross_point)
-    u_cross = u_cross.detach()
-
-    traindata_bndry_G_1.g_1_SmpPts = g_1
-    traindata_bndry_G_2.g_1_SmpPts = g_2
-    traindata_bndry_G_3.g_1_SmpPts = g_3
-    traindata_bndry_G_4.g_1_SmpPts = g_4
     # compute testing errors over entire domain
     error_L2 = float(error_L2_R + error_L2_B)
     error_H1 = float(error_H1_R + error_H1_B)
@@ -220,6 +209,37 @@ while((ite_index < args.max_ite_num)):
     training_time =time_temp - time_ite
     time_ite = time_temp
     logger.append([ite_index,error_L2,error_H1,training_time])
+
+    g_1_temp =  model_B(SmpPts_Intfc_1)
+    g_2_temp =  model_B(SmpPts_Intfc_2)
+    g_3_temp =  model_B(SmpPts_Intfc_3)
+    g_4_temp =  model_B(SmpPts_Intfc_4)
+    # check if the stop criteria is satisfied
+    u_R_temp = model_R(Smppts_test_R)
+    u_B_temp = model_B(Smppts_test_B)
+    if torch.norm(g_1 - g_1_temp).item()/torch.norm(g_1_temp).item() + torch.norm(g_2 - g_2_temp).item()/torch.norm(g_2_temp).item() + torch.norm(g_3 - g_3_temp).item()/torch.norm(g_3_temp).item() + torch.norm(g_4 - g_4_temp).item()/torch.norm(g_4_temp).item() < args.tol:
+        break
+    if torch.norm(u_R_temp - u_R).item()/torch.norm(u_R_temp).item() < args.tol or torch.norm(u_B_temp - u_B).item()/torch.norm(u_B_temp).item() < args.tol:
+        break
+    # update Dirichlet boundary condition for South-East and North-West subproblem 
+        
+    g_1 = 1/2 * g_1_temp + (1-1/2) * g_1
+    g_2 = 1/2 * g_2_temp + (1-1/2) * g_2
+    g_3 = 1/2 * g_3_temp + (1-1/2) * g_3
+    g_4 = 1/2 * g_4_temp + (1-1/2) * g_4
+    g_1 = g_1.detach()
+    g_2 = g_2.detach()
+    g_3 = g_3.detach()
+    g_4 = g_4.detach()
+    u_cross = 0.5 * model_B(cross_point) + 0.5 * u_cross
+    u_cross = u_cross.detach()
+    u_R = u_R_temp
+    u_B = u_B_temp
+
+    traindata_bndry_G_1.g_1_SmpPts = g_1
+    traindata_bndry_G_2.g_1_SmpPts = g_2
+    traindata_bndry_G_3.g_1_SmpPts = g_3
+    traindata_bndry_G_4.g_1_SmpPts = g_4
 
     ite_index += 1
 
