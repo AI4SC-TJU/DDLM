@@ -1,6 +1,6 @@
 # Instructions for Generating Figures 5-7 in Our Revised Manuscript
 ## Figure 5 (Fig5) - DN-PINNs Result
-To obtain the data represented in Figure 5, execute the script DNLM-2prob-2D-PINN.py.
+To obtain the data represented in Figure 5, execute the script DN-PINNs-2prob-2D.py.
  
 ## Figure 6 (Fig6) - DNLA (PINNs) Results
 For the results displayed in Figure 6, execute the script DNLM-2prob-2D-DNLM(PINN).py to generate the corresponding data.
