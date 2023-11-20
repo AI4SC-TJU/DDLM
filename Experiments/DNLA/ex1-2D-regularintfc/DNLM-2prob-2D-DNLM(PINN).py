@@ -53,7 +53,7 @@ parser.add_argument('--num_test_pts', type=int, default=100, help='number of sam
 parser.add_argument('--max_ite_num', type=int, default=30, help='maximum number of outer iterations')
 parser.add_argument('--rate_decay', type=float, default=0.5, help='the initial learning rate')
 # Stopping criteria
-parser.add_argument('--tol', type=float, default=0.001, help='tolerance of stopping criteria')
+parser.add_argument('--tol', type=float, default=0.01, help='tolerance of stopping criteria')
 args = parser.parse_args()
 ##############################################################################################
 ## problem setting
