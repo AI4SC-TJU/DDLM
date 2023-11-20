@@ -206,7 +206,7 @@ while((ite_index < args.max_ite_num)):
 
     if torch.norm(g_left - g_left_temp).item()/torch.norm(g_left_temp).item() < args.tol:
         break
-    if (torch.norm(u_left_temp - u_NN_left).item()/torch.norm(u_NN_left).item()< args.tol) and (torch.norm(u_right_temp - u_NN_right).item()/torch.norm(u_NN_right).item() < args.tol):
+    if (torch.norm(u_left_temp - u_NN_left).item()/torch.norm(u_NN_left).item()< args.tol) or (torch.norm(u_right_temp - u_NN_right).item()/torch.norm(u_NN_right).item() < args.tol):
         break 
     g_left = 1/2 * g_left_temp + (1-1/2) * g_left
     g_left = g_left.detach()
