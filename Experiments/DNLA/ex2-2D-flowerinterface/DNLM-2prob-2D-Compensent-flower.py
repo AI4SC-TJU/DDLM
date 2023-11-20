@@ -204,17 +204,16 @@ while((ite_index < args.max_ite_num)):
     torch.save(model_out.state_dict(), args.result + "/mode_out_DNLM(PINN)_flower_c1=1_c2=1-%d.pth"%ite_index)
     
     
-    # update Dirichlet boundary condition for inner subproblem
+    # check if the stop criteria is satisfied
     g_in_temp =  model_out(SmpPts_Intfc)
     u_in_temp = model_in(Smppts_in)
     u_out_temp = model_out(Smppts_out)
 
-    # check if the stop criteria is satisfied
     if torch.norm(g_in - g_in_temp).item()/torch.norm(g_in_temp).item() < args.tol:
         break
     if (torch.norm(u_in_temp - u_in).item()/torch.norm(u_in).item()< args.tol) or (torch.norm(u_out_temp - u_out).item()/torch.norm(u_out_temp).item() < args.tol):
         break 
-
+    # update Dirichlet boundary condition for inner subproblem
     g_in = args.theta * g_in_temp + (1-args.theta) * g_in
     g_in = g_in.detach()
     u_in = u_in_temp
