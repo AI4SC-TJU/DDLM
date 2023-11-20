@@ -53,8 +53,9 @@ parser.add_argument('--num_test_pts', type=int, default=100, help='number of sam
 parser.add_argument('--alpha_left', type=float, default=1, help='alpha of the left subproblem')
 parser.add_argument('--alpha_right', type=float, default=1000, help='alpha of the right subproblem')
 parser.add_argument('--max_ite_num', type=int, default=30, help='maximum number of outer iterations')
-
-args = parser.parse_args()
+# set the stop criteria
+parser.add_argument('--tol', type=float, default=0.01, help='tolerance of stopping criteria')
+args = parser.parse_known_args()[0]
 ##############################################################################################
 ## problem setting
 ## ----------------------------- ##
@@ -140,6 +141,8 @@ h_exact = Exact_Solution.h_Exact_Square2D(SmpPts_Intfc[:,0],SmpPts_Intfc[:,1],ar
 h_diff = SmpPts_Intfc[:,1]*(SmpPts_Intfc[:,1]-1)*SmpPts_Intfc[:,0]
 g_left = h_exact - 50*h_diff.reshape(-1,1)
 g_left = g_left.reshape(-1,1)
+u_left_temp = Exact_Solution.u_Exact_Square2D(test_smppts_left[:, 0], test_smppts_left[:, 1]).reshape(-1,1)
+u_right_temp = Exact_Solution.u_Exact_Square2D(test_smppts_right[:, 0], test_smppts_right[:, 1]).reshape(-1,1)
 
 # step 2. loop over DDM outer iterations
 ## ----------------------------- ##
@@ -161,10 +164,7 @@ while((ite_index < args.max_ite_num)):
     g_right = g_right.detach()
     # right subproblem-solving
     model_right, error_L2_right, error_H1_right = CompensentedSolver(args, traindata_bndry_G, dataloader_bndry_G, SmpPts_Intfc, model_left, ite_index, sub_dom=2)
-    # update Robin boundary condition for left subproblem
-    g_left_temp = (args.alpha_left + args.alpha_right) * model_right(SmpPts_Intfc) - g_right
-    g_left = 1/2 * g_left_temp + (1-1/2) * g_left
-    g_left = g_left.detach()
+
 
     # compute testing errors over entire domain
     error_L2 = float(error_L2_left + error_L2_right)
@@ -174,7 +174,7 @@ while((ite_index < args.max_ite_num)):
     ErrH1.append(error_H1)
     logger_temp.append([ite_index,error_L2,error_H1])
 
-    ite_index += 1
+
 
     # compute solution over entire domain (for the ease of plotting figures)
     u_NN_left = model_left(test_smppts_left)
@@ -199,7 +199,20 @@ while((ite_index < args.max_ite_num)):
     io.savemat(args.result+"/gradu_exact.mat",{"grad_u_exact": grad_u_Exact})    
     io.savemat(args.result+"/gradu_NN_ite%d_test.mat"%ite_index,{"grad_u_NN_test": grad_u_NN})
     io.savemat(args.result+"/err_test_ite%d.mat"%ite_index, {"pointerr": err})
-
+    
+    # check if the stop criteria is satisfied
+    if torch.norm(g_left - g_left_temp).item()/torch.norm(g_left_temp).item() < args.tol:
+        break
+    if (torch.norm(u_left_temp - u_NN_left).item()/torch.norm(u_NN_left).item()< args.tol) or (torch.norm(u_right_temp - u_NN_right).item()/torch.norm(u_NN_right).item() < args.tol):
+        break 
+    # update Robin boundary condition for left subproblem
+    g_left_temp = (args.alpha_left + args.alpha_right) * model_right(SmpPts_Intfc) - g_right
+    g_left = 1/2 * g_left_temp + (1-1/2) * g_left
+    g_left = g_left.detach()
+    u_left_temp = u_NN_left
+    u_right_temp = u_NN_right
+    traindata_bndry_G.g_1_smppts = g_left
+    ite_index += 1
 ErrL2 = np.asarray(ErrL2).reshape(-1,1)
 ErrH1 = np.asarray(ErrH1).reshape(-1,1)
 io.savemat(args.result+"/ErrL2.mat",{"ErrL2": ErrL2})
