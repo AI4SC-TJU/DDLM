@@ -140,6 +140,8 @@ h_diff = SmpPts_Intfc[:,1]*(SmpPts_Intfc[:,1]-1)*SmpPts_Intfc[:,0]*(SmpPts_Intfc
 SmpPts_Intfc.requires_grad = True
 g_left = h_exact - 50*h_diff.reshape(-1,1)
 g_left = g_left.reshape(-1,1)
+u_left_temp = Exact_Solution.u_Exact_Square2D(test_smppts_left[:, 0], test_smppts_left[:, 1]).reshape(-1,1)
+u_right_temp = Exact_Solution.u_Exact_Square2D(test_smppts_right[:, 0], test_smppts_right[:, 1]).reshape(-1,1)
 
 # step 2. loop over DDM outer iterations
 ## ----------------------------- ##
@@ -167,8 +169,7 @@ while((ite_index < args.max_ite_num)):
     model_right, error_L2_right, error_H1_right = CompensentedSolver(args, traindata_bndry_G, dataloader_bndry_G, SmpPts_Intfc, model_left, ite_index, 2)
     # update Robin boundary condition for left subproblem
     g_left_temp =  model_right(SmpPts_Intfc)
-    g_left = 1/2 * g_left_temp + (1-1/2) * g_left
-    g_left = g_left.detach()
+
 
     # compute testing errors over entire domain
     error_L2 = float(error_L2_left + error_L2_right)
@@ -197,7 +198,17 @@ while((ite_index < args.max_ite_num)):
     gradu_x_Exact = test_smppts.Gradu_x_Exact_SmpPts.reshape(-1,1).to(device)
     gradu_y_Exact = test_smppts.Gradu_y_Exact_SmpPts.reshape(-1,1).to(device)
     grad_u_Exact = torch.cat([gradu_x_Exact,gradu_y_Exact],dim=1).detach().cpu().numpy()
-
+    if torch.norm(g_left - g_left_temp).item()/torch.norm(g_left_temp).item() < args.tol:
+        break
+    if (torch.norm(u_left_temp - u_NN_left).item()/torch.norm(u_NN_left).item()< args.tol) and (torch.norm(u_right_temp - u_NN_right).item()/torch.norm(u_NN_right).item() < args.tol):
+        break 
+    
+    g_left = 1/2 * g_left_temp + (1-1/2) * g_left
+    g_left = g_left.detach()
+    u_left_temp = u_NN_left
+    u_right_temp = u_NN_right
+    traindata_bndry_G.g_1_smppts = g_left
+    
     io.savemat(args.result+"/u_exact.mat",{"u_exact": u_Exact})
     io.savemat(args.result+"/u_NN_ite%d_test.mat"%ite_index,{"u_NN_test": u_NN_test})
     io.savemat(args.result+"/gradu_exact.mat",{"grad_u_exact": grad_u_Exact})    
