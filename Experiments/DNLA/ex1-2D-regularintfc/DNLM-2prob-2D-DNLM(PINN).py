@@ -203,7 +203,7 @@ while((ite_index < args.max_ite_num)):
     io.savemat(args.result+"/gradu_NN_ite%d_test.mat"%ite_index,{"grad_u_NN_test": grad_u_NN})
     io.savemat(args.result+"/err_test_ite%d.mat"%ite_index, {"pointerr": err})
 
-
+    # check if the stop criteria is satisfied
     if torch.norm(g_left - g_left_temp).item()/torch.norm(g_left_temp).item() < args.tol:
         break
     if (torch.norm(u_left_temp - u_NN_left).item()/torch.norm(u_NN_left).item()< args.tol) or (torch.norm(u_right_temp - u_NN_right).item()/torch.norm(u_NN_right).item() < args.tol):
