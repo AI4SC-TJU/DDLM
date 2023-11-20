@@ -33,7 +33,7 @@ parser = argparse.ArgumentParser(description='DNLM(PINN) method for 5d Poisson p
 parser.add_argument('-r', '--result', default='Results/4_2Prob-5D/DNLM(PINN)/G1e_2-N2e4-baseline/simulation-test', type=str, metavar='PATH', help='path to save checkpoint')
 
 # optimization options
-parser.add_argument('--num_epochs', default=1, type=int, metavar='N', help='number of total epochs to run')
+parser.add_argument('--num_epochs', default=200, type=int, metavar='N', help='number of total epochs to run')
 parser.add_argument('--beta', default=400, type=int, metavar='N', help='penalty coefficeint for mismatching of boundary data')
 parser.add_argument('--milestones', type=int, nargs='+', default=[600, 1500], help='decrease learning rate at these epochs')
 parser.add_argument('--num_batches', default=5, type=int, metavar='N',help='number of mini-batches during training')
@@ -50,7 +50,7 @@ parser.add_argument('--num_test_pts', type=int, default=10, help='number of samp
 
 # Dirichlet-Neumann algorithm setting    
 
-parser.add_argument('--max_ite_num', type=int, default=15, help='maximum number of outer iterations')
+parser.add_argument('--max_ite_num', type=int, default=30, help='maximum number of outer iterations')
 parser.add_argument('--dim_prob', type=int, default=5, help='dimension of the sub-problem to be solved')
 # set the stop criteria
 parser.add_argument('--tol', type=float, default=0.01, help='tolerance of stopping criteria')
