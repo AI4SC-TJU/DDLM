@@ -55,11 +55,14 @@ parser.add_argument('--alpha_B', type=float, default=100, help='alpha of the bla
 parser.add_argument('--r0', type=float, default=1, help='radius of the sphere in the square')
 parser.add_argument('--max_ite_num', type=int, default=21, help='maximum number of righter iterations')
 parser.add_argument('--dim_prob', type=int, default=2, help='dimension of the sub-problem to be solved')
+# set the stop criteria
+parser.add_argument('--tol', type=float, default=0.01, help='tolerance of stopping criteria')
+args = parser.parse_known_args()[0]
 
-args = parser.parse_args()
 File_Path = args.result
 if not os.path.exists(File_Path):
     os.makedirs(File_Path)
+
 ##############################################################################################
 ## problem setting
 ## ----------------------------- ##
@@ -123,7 +126,11 @@ SmpPts_Intfc_2 = traindata_bndry_G_2.SmpPts_Bndry_G.to(device)
 SmpPts_Intfc_3 = traindata_bndry_G_3.SmpPts_Bndry_G.to(device)     
 SmpPts_Intfc_4 = traindata_bndry_G_4.SmpPts_Bndry_G.to(device)     
 
-
+# prepare testing data for checking stop criteria
+Smppts_test_1 = Testdata(args.num_test_pts, 1, args.alpha_R, args.alpha_B).SmpPts_Test.to(device)
+Smppts_test_2 = Testdata(args.num_test_pts, 2, args.alpha_R, args.alpha_B).SmpPts_Test.to(device)
+Smppts_test_3 = Testdata(args.num_test_pts, 3, args.alpha_R, args.alpha_B).SmpPts_Test.to(device)
+Smppts_test_4 = Testdata(args.num_test_pts, 4, args.alpha_R, args.alpha_B).SmpPts_Test.to(device)
 ##############################################################################################
 
 File_Path = args.result
@@ -154,12 +161,6 @@ g_2 =   100 * Exact_Solution_gradcontrast.u_0(SmpPts_Intfc_2, args.alpha_R, args
 g_3 =   100 * Exact_Solution_gradcontrast.u_0(SmpPts_Intfc_3, args.alpha_R, args.alpha_B, 'R').reshape(-1,1).detach() + 100 * h_diff_3.reshape(-1,1).detach()
 g_4 =   100 * Exact_Solution_gradcontrast.u_0(SmpPts_Intfc_4, args.alpha_R, args.alpha_B, 'R').reshape(-1,1).detach() + 100 * h_diff_4.reshape(-1,1).detach()
 
-'''
-g_1 =   h_exact_1
-g_2 =   h_exact_2
-g_3 =   h_exact_3
-g_4 =   h_exact_4
-'''
 g_1 = g_1.detach()
 g_2 = g_2.detach()
 g_3 = g_3.detach()
@@ -182,6 +183,12 @@ traindata_bndry_G_2.g_1_SmpPts = g_2.detach()
 traindata_bndry_G_3.g_1_SmpPts = g_3.detach()
 traindata_bndry_G_4.g_1_SmpPts = g_4.detach()
 
+u_1 = Exact_Solution_gradcontrast.u_Exact(Smppts_test_1, args.alpha_R, args.alpha_B, 1).reshape(-1,1)
+u_2 = Exact_Solution_gradcontrast.u_Exact(Smppts_test_2, args.alpha_R, args.alpha_B, 2).reshape(-1,1)
+u_3 = Exact_Solution_gradcontrast.u_Exact(Smppts_test_3, args.alpha_R, args.alpha_B, 3).reshape(-1,1)
+u_4 = Exact_Solution_gradcontrast.u_Exact(Smppts_test_4, args.alpha_R, args.alpha_B, 4).reshape(-1,1)
+
+
 u_cross = u_cross.detach()
 # step 2. loop over DDM outer iterations
 ## ----------------------------- ##
@@ -199,17 +206,13 @@ while((ite_index < args.max_ite_num)):
     
     # left subproblem-solving
     model_1, error_L2_1, error_H1_1 = DirichletSolverPINN(args, traindata_bndry_G_2, dataloader_bndry_G_1, dataloader_bndry_G_2, ite_index, u_cross,  sub_dom=1)    
-    '''
-    model_1.load_state_dict(torch.load('Results/6_4Prob-2D-highcontrast-4NN/DN-PINNs/G1e_2-N2e4-baseline/simulation-1/model_ite-1-1.pth'))
-    model_1.eval()
-    '''
+
     u_cross = model_1(cross_point)
     u_cross = u_cross.detach() 
+
+
     model_3, error_L2_3, error_H1_3 = DirichletSolverPINN(args, traindata_bndry_G_2, dataloader_bndry_G_3, dataloader_bndry_G_4, ite_index, u_cross,  sub_dom=3)    
-    '''
-    model_3.load_state_dict(torch.load('Results/6_4Prob-2D-highcontrast-4NN/DN-PINNs/G1e_2-N2e4-baseline/simulation-1/model_ite-1-3.pth'))
-    model_3.eval()
-    '''
+
     u_cross = model_3(cross_point)
     u_cross = u_cross.detach()  
     
@@ -245,24 +248,6 @@ while((ite_index < args.max_ite_num)):
 
     model_4, error_L2_4, error_H1_4 = NeumannSolverPINN(args, traindata_bndry_G_1, dataloader_bndry_G_1, dataloader_bndry_G_4, ite_index, u_cross, sub_dom=4)
 
-    # update Dirichlet boundary condition for South-East and North-West subproblem
-    g_1_temp =  model_4(SmpPts_Intfc_1)
-    g_2_temp =  model_2(SmpPts_Intfc_2)
-    g_3_temp =  model_2(SmpPts_Intfc_3)
-    g_4_temp =  model_4(SmpPts_Intfc_4)
-        
-    g_1 = 0.5 * g_1_temp + 0.5 * g_1
-    g_2 = 0.5 * g_2_temp + 0.5 * g_2
-    g_3 = 0.5 * g_3_temp + 0.5 * g_3
-    g_4 = 0.5 * g_4_temp + 0.5 * g_4
-    g_1 = g_1.detach()
-    g_2 = g_2.detach()
-    g_3 = g_3.detach()
-    g_4 = g_4.detach()
-    traindata_bndry_G_1.g_1_SmpPts = g_1
-    traindata_bndry_G_2.g_1_SmpPts = g_2
-    traindata_bndry_G_3.g_1_SmpPts = g_3
-    traindata_bndry_G_4.g_1_SmpPts = g_4
     # compute testing errors over entire domain
     error_L2 = float(error_L2_1 + error_L2_2 + error_L2_3 + error_L2_4)
     error_H1 = float(error_H1_1 + error_H1_2 + error_H1_3 + error_H1_4)
@@ -273,6 +258,47 @@ while((ite_index < args.max_ite_num)):
     training_time =time_temp - time_ite
     time_ite = time_temp
     logger.append([ite_index,error_L2,error_H1,training_time])
+
+    # check if the stop criteria is satisfied
+    g_1_temp =  model_4(SmpPts_Intfc_1)
+    g_2_temp =  model_2(SmpPts_Intfc_2)
+    g_3_temp =  model_2(SmpPts_Intfc_3)
+    g_4_temp =  model_4(SmpPts_Intfc_4)
+
+    u_1_temp = model_1(Smppts_test_1)
+    u_2_temp = model_2(Smppts_test_2)
+    u_3_temp = model_3(Smppts_test_3)
+    u_4_temp = model_4(Smppts_test_4)
+
+    if torch.norm(g_1 - g_1_temp).item()/torch.norm(g_1_temp).item() + torch.norm(g_2 - g_2_temp).item()/torch.norm(g_2_temp).item() + torch.norm(g_3 - g_3_temp).item()/torch.norm(g_3_temp).item() + torch.norm(g_4 - g_4_temp).item()/torch.norm(g_4_temp).item() < args.tol:
+        break
+    if torch.norm(u_1_temp - u_1).item()/torch.norm(u_1_temp).item() < args.tol or torch.norm(u_2_temp - u_2).item()/torch.norm(u_2_temp).item() or torch.norm(u_3_temp - u_3).item()/torch.norm(u_3_temp).item() or torch.norm(u_4_temp - u_4).item()/torch.norm(u_4_temp).item() < args.tol:
+        break
+
+    # update Dirichlet boundary condition for South-East and North-West subproblem
+
+    g_1 = 0.5 * g_1_temp + 0.5 * g_1
+    g_2 = 0.5 * g_2_temp + 0.5 * g_2
+    g_3 = 0.5 * g_3_temp + 0.5 * g_3
+    g_4 = 0.5 * g_4_temp + 0.5 * g_4
+    g_1 = g_1.detach()
+    g_2 = g_2.detach()
+    g_3 = g_3.detach()
+    g_4 = g_4.detach()
+    u_1 = u_1_temp
+    u_2 = u_2_temp
+    u_3 = u_3_temp
+    u_4 = u_4_temp
+
+    traindata_bndry_G_1.g_1_SmpPts = g_1
+    traindata_bndry_G_2.g_1_SmpPts = g_2
+    traindata_bndry_G_3.g_1_SmpPts = g_3
+    traindata_bndry_G_4.g_1_SmpPts = g_4
+    u_cross = model_4(cross_point)
+    u_cross = u_cross.detach()
+
+
+
 
     ite_index += 1
 
