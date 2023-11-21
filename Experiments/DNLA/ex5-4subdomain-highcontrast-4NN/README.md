@@ -9,5 +9,5 @@ For the results displayed in the Table SM1, execute the script `DNLM-4prob-2D-Co
 For the data displayed in the Table SM1, execute the script `DNLM-4prob-2D-Compensent-Ritz-highcontrast-4NN.py` to generate the corresponding results.
 
 ## Figure Generation:
-Utilize MATLAB and execute the script `plot_Solutions_1by1_flower.m` to create the graphical representation associated with the data obtained from the previous steps.
+Utilize MATLAB and execute the script `plot_DNLM_4d_1by1.m` to create the graphical representation associated with the data obtained from the previous steps.
 
