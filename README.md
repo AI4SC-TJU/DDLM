@@ -1,4 +1,4 @@
-# Domain Decomposition Learning Methods for Solving Elliptic Problems
+# Domain Decomposition Learning Methods for Elliptic Problems
 Based on a direct transmission of Dirichlet and Neumann traces along subdomain interfaces, neural networks have already been employed as subproblem solvers in certain overlapping and non-overlapping methods. However, the boundary penalty treatment often leads to a tendency for the network solution and its derivatives to furnish more precision inside the domain, rather than at the boundary, thereby motivating the exploration of a variational approach for enforcing flux transmisssion with increased accuracy. In this study, a novel learning approach, i.e., the compensated deep Ritz method using neural network extension operators, is proposed to construct effective learning algorithms for realizing non-overlapping domain decomposition methods even in the presence of inaccurate interface conditions. 
 
 
