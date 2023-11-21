@@ -1,4 +1,4 @@
-# Motivation-1: DtN Map for Dirichlet-Neumann Algorithm
+# Motivation\#1: DtN Map for Dirichlet-Neumann Algorithm
 
 With boundary conditions being included as soft constraints in the training loss function, the trained network solution of Dirichlet subproblem is often observed to furnish more precision inside the domain, rather than at the boundary, thereby motivating the exploration of a variational approach for enforcing flux transmisssion between neighbouring subdomains.
 
@@ -9,7 +9,7 @@ With boundary conditions being included as soft constraints in the training loss
 
 
 
-# Motivation-2: Weight Imbalance for Robin-Robin Algorithm
+# Motivation\#2: Weight Imbalance for Robin-Robin Algorithm
 
 With boundary conditions being included as soft constraints in the training loss function, the trained network solution of Dirichlet subproblem is often observed to furnish more precision inside the domain, rather than at the boundary, thereby motivating the exploration of a variational approach for enforcing flux transmisssion between neighbouring subdomains.
 
