@@ -27,6 +27,6 @@ But our proposed method, DNLA (PINNs) and DNLA (Ritz), can still work since the 
 |:--------------------------------------------------------------:|
 | *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DNLA (PINNs) on the test dataset.* |
 
-|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/d9224882-ecd7-4b91-831a-8f834464c74a)|
+|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/149239dd-d892-486a-9e7a-8f11c3318e74)|
 |:--------------------------------------------------------------:|
 | *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DNLA (Ritz) on the test dataset.* |
