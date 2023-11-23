@@ -15,13 +15,13 @@ where the exact solution $u(x,y) = (x^2 + y^2)(\sqrt{x^2 + y^2} - r_f(x,y))$, th
 ```
 Our learning algorithm can easily handle such irregular shapes, while finite difference or finite element methods necessitates meticulous treatment of edges and corners.
 
-|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/3bffc9a1-c5c9-4a28-b1fc-651123268f0e)|
+|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/00192b1b-7616-4d3f-9ed0-273208b6be0f)|
 |:--------------------------------------------------------------:|
 | *From left to right: decomposition into two subdomains, true solution $`u(x,y)`$, and its partial derivatives $`\partial_x u(x,y)`$, $`\partial_y u(x,y)`$ |
 
 
 
-|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/2d6b9d5c-ee25-4ed9-b63f-7b63bb13c165)|
+|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/b0ca1b81-53b1-4466-b362-f8635b6fcc9b)|
 |:--------------------------------------------------------------:|
 | *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DN-PINNs on the test dataset.* |
 
@@ -36,3 +36,8 @@ But our proposed method, DNLA (PINNs) and DNLA (Ritz), can still work since the 
 |![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/f9a78c6b-516b-46b7-bb34-4ac27d506cce)|
 |:--------------------------------------------------------------:|
 | *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DNLA (Ritz) on the test dataset.* |
+
+
+
+
+
