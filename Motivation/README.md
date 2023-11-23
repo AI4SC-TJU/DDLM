@@ -19,6 +19,37 @@ This pattern of error distribution, i.e., higher precision is attained inside th
 
 With boundary conditions being included as soft constraints in the training loss function, the trained network solution of Dirichlet subproblem is often observed to furnish more precision inside the domain, rather than at the boundary, thereby motivating the exploration of a variational approach for enforcing flux transmisssion between neighbouring subdomains.
 
+| ![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/c3895adc-a2da-4a16-b67a-668dcc4851e1)             |
+|:--------------------------------------------------------------:|
+| *Network solutions of Robin subproblem with different values of $`\kappa_1`$, together with their error profiles.* |
+
+
+Based on the observation that the network solution of Dirichlet and Robin subproblem often exhibit higher errors at the boundary compared to its interior domain, a question naturally arises:
+
+Is it feasible to utilize the interior solution for data exchange between neighbouring subproblems?
+
+To answer this question, We consider employing variational principles, rather than a direct flux transmission along subdomain interfaces.
+
+On the one hand, the Neumann subproblem within the DN-PINNs strategy is also solved using PINNs, i.e.,
+```math
+\begin{align*}
+    \hat{u}_2^{[k]} = \mathop{\text{arg\,min}}_{u_2} \int_{\Omega_2} | \Delta u_2 + f |^2\,dx + \beta\left(\int_{\textcolor{red}{\Gamma}} \Big|  \frac{\partial u_2}{\partial \mathbf{n}_2} - \textcolor{red}{\frac{\partial \hat{u}^{[k]}_1}{\partial \mathbf{n}_2}} \Big|^2\,ds + \int_{\partial\Omega\cap\partial\Omega_2} |u_2|^2\,ds \right),
+\end{align*}
+```
+where the boundary data (marked in red color) relies on the Neumann trace of Dirichlet subproblem $`\textcolor{red}{\nabla \hat{u}^{[k]}_1 |_\Gamma}`$. On the other hand, the loss function of our proposed method is defined as
+```math
+\begin{align*}
+    	\hat{u}_2^{[k]} = \mathop{\text{arg\,min}}_{\hat{u}_2} \int_{\Omega_2} \Big( \frac12 | \nabla \hat{u}_2 |^2  - f \hat{u}_2 \Big) dx + \int_{\textcolor{blue}{\Omega_1}} \Big( \textcolor{blue}{\nabla \hat{u}_1^{[k]}}\cdot \nabla \hat{u}_2  - f \hat{u}_2 \Big) dx + \beta \int_{\partial\Omega} |\hat{u}_2|^2\,ds,
+\end{align*}
+```
+where the exchanged data (marked in blue color) is represented using the interior solution $`\textcolor{blue}{\nabla \hat{u}^{[k]}_1 |_{\Omega_1}}`$.
+
+
+
+
+
+
+
 
 # Introduction
 This is the code for the figures shown in Remark 2.1 and Remark 2.2
