@@ -11,7 +11,7 @@ where the true solution is given by $u(x,y) = \sin(2\pi x)(\cos(2\pi y)-1)$ and 
 
 | ![exact-ex1](https://github.com/AI4SC-TJU/DDLM/assets/93070782/ab5798e2-7179-4f23-9021-df8243e31bcb)|
 |:--------------------------------------------------------------:|
-| *From left to right: decomposition into two subdomains, true solution $u(x,y)$, and its partial derivatives $\partial_x u(x,y)$, $\partial_y u(x,y)$* |
+| *From left to right: decomposition into two subdomains, true solution $`u(x,y)`$, and its partial derivatives $`\partial_x u(x,y)`$, $`\partial_y u(x,y)`$ |
 
 
 
@@ -20,7 +20,7 @@ It is noteworthy that this solution reaches local extrema at $(0.5,0.5)$, thereb
 
 |![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/30e96eff-5e05-4261-8798-b7adc02995e3)|
 |:--------------------------------------------------------------:|
-| *Iterative solutions $\hat{u}^{[k]}(x,y)$ using DN-PINNs on the test dataset.* |
+| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DN-PINNs on the test dataset.* |
 
 
 But our proposed method, DNLA (PINNs) and DNLA (Ritz), can still work since the variational principle is used.
@@ -28,10 +28,10 @@ But our proposed method, DNLA (PINNs) and DNLA (Ritz), can still work since the 
 
 |![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/a0295d1a-0c66-495a-9965-e6944aefe41e)|
 |:--------------------------------------------------------------:|
-| *Iterative solutions $\hat{u}^{[k]}(x,y)$ using DNLA (PINNs) on the test dataset.* |
+| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DNLA (PINNs) on the test dataset.* |
 
 |![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/e1767d6e-121d-4b6a-b9c9-2e0640bb7f75)|
 |:--------------------------------------------------------------:|
-| *Iterative solutions $\hat{u}^{[k]}(x,y)$ using DNLA (Ritz) on the test dataset.* |
+| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DNLA (Ritz) on the test dataset.* |
 
 
