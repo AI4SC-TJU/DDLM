@@ -20,14 +20,13 @@ Our learning algorithm can easily handle such irregular shapes, while finite dif
 | *From left to right: decomposition into two subdomains, true solution $`u(x,y)`$, and its partial derivatives $`\partial_x u(x,y)`$, $`\partial_y u(x,y)`$ |
 
 
-
+The DN-PINNs approach fails to converge to the true solution as the network solution of Dirichlet subproblem is prone to return inaccurate Neumann traces at interface.
 |![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/b0ca1b81-53b1-4466-b362-f8635b6fcc9b)|
 |:--------------------------------------------------------------:|
 | *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ and the pointwise absolute error using DN-PINNs on the test dataset.* |
 
 
-But our proposed method, DNLA (PINNs) and DNLA (Ritz), can still work since the variational principle is used.
-
+In contrast, by solving the Neumann subproblem through our compensated deep Ritz method, the numerical results demonstrate that our DNLA (PINNs) can obtain a satisfactory approximation to the exact solution, which also avoids the meshing procedure that is often challenging for problems with complex interfaces. 
 
 |![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/b39ec93e-618f-40f8-8489-68f1674f2d0f)|
 |:--------------------------------------------------------------:|
