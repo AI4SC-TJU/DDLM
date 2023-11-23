@@ -23,13 +23,12 @@ With boundary conditions being included as soft constraints in the training loss
 |:--------------------------------------------------------------:|
 | *Network solutions of Robin subproblem with different values of $`\kappa_1`$, together with their error profiles.* |
 
+Based on the observation that the network solution of Dirichlet and Robin subproblem often exhibit higher errors at the boundary compared to its interior domain, we can draw a conclusion that d
 
-Based on the observation that the network solution of Dirichlet and Robin subproblem often exhibit higher errors at the boundary compared to its interior domain, a question naturally arises:
 
-Is it feasible to utilize the interior solution for data exchange between neighbouring subproblems?
+To answer this question, We consider employing variational principles, rather than a direct flux transmission along subdomain interfaces, when developing the domain decomposition learning method.
 
-To answer this question, We consider employing variational principles, rather than a direct flux transmission along subdomain interfaces.
-
+Let's see more details about 
 On the one hand, the Neumann subproblem within the DN-PINNs strategy is also solved using PINNs, i.e.,
 ```math
 \begin{align*}
