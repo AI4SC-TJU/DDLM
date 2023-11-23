@@ -17,7 +17,7 @@ where $`u(x,y) = \sin(2\pi x)\sin(2\pi y)`$ and $f(x,y)=$ $8 \pi^2 \sin(2\pi x)\
 
 |![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/8bcfecdb-44b2-4d86-b038-59c533eddc07)|
 |:--------------------------------------------------------------:|
-| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DN-PINNs on the test dataset.* |
+| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ and the pointwise absolute error using DN-PINNs on the test dataset.* |
 
 
 But our proposed method, DNLA (PINNs) and DNLA (Ritz), can still work since the variational principle is used.
@@ -25,8 +25,8 @@ But our proposed method, DNLA (PINNs) and DNLA (Ritz), can still work since the 
 
 |![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/f7f1f48e-9872-4c0d-9f58-7ff5abe31efc)|
 |:--------------------------------------------------------------:|
-| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DNLA (PINNs) on the test dataset.* |
+| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ and the pointwise absolute error using DNLA (PINNs) on the test dataset.* |
 
 |![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/149239dd-d892-486a-9e7a-8f11c3318e74)|
 |:--------------------------------------------------------------:|
-| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DNLA (Ritz) on the test dataset.* |
+| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ and the pointwise absolute error using DNLA (Ritz) on the test dataset.* |
