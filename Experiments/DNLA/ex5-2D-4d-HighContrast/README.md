@@ -11,7 +11,7 @@ where the computational domain is decomposed into four isolated subdomains is sh
 
 |![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/5c881b55-2782-46f0-860a-eab6cf2103b2)|
 |:--------------------------------------------------------------:|
-| *From left to right: decomposition into two subdomains, true solution $`u(x,y)`$, and its partial derivatives $`\partial_x u(x,y)`$, $`\partial_y u(x,y)`$* |
+| *From left to right: decomposition into two subdomains, true solution $`u(x,y)`$, and its partial derivatives $`\partial_x u(x,y)`$, $`\partial_y u(x,y)`$ * |
 
 
 the exact solution is given by $`u(x,y) = \sin(4\pi x) \sin(4\pi y) / c(x,y)`$, and the coefficient $`c(x,y)`$ is piecewise constant with respect to the partition of domain
