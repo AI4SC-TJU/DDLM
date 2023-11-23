@@ -23,19 +23,19 @@ Our learning algorithm can easily handle such irregular shapes, while finite dif
 
 |![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/b0ca1b81-53b1-4466-b362-f8635b6fcc9b)|
 |:--------------------------------------------------------------:|
-| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DN-PINNs on the test dataset.* |
+| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ and the pointwise absolute error using DN-PINNs on the test dataset.* |
 
 
 But our proposed method, DNLA (PINNs) and DNLA (Ritz), can still work since the variational principle is used.
 
 
-|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/a4ff311e-4fa6-45b0-9dbb-f6395cf9df12)|
+|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/b39ec93e-618f-40f8-8489-68f1674f2d0f)|
 |:--------------------------------------------------------------:|
-| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DNLA (PINNs) on the test dataset.* |
+| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ and the pointwise absolute error using DNLA (PINNs) on the test dataset.* |
 
-|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/f9a78c6b-516b-46b7-bb34-4ac27d506cce)|
+|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/fc392c3c-5d65-4320-a786-56b185ced22c)|
 |:--------------------------------------------------------------:|
-| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DNLA (Ritz) on the test dataset.* |
+| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ and the pointwise absolute error using DNLA (Ritz) on the test dataset.* |
 
 
 
