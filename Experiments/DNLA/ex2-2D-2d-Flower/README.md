@@ -1,15 +1,38 @@
-# Instructions for Generating Table 6 in Our Revised Manuscript
-## Table 6 - DN-PINNs Result
-To acquire the data represented in the first row of Table 6, execute the script `DN-PINNs-2prob-2D-flower.py`.
+In this subsection, we tackle the Poisson problem with a more intricate interface geometry to demonstrate the mesh-free character of deep learning solvers. The problem is described as follows:
+```math
+\begin{equation}
+\begin{array}{cl}
+-\Delta u(x,y)  = \displaystyle-35\sin(12 \arctan(\frac{y}{x})) + 2 - 9\sqrt{x^2 + y^2}  \ & \text{in}\ \Omega=(0.01,1.01)\times (0,1),\\
+u(x,y) = g(x,y)\ \ & \text{on}\ \partial \Omega,
+\end{array}
+\end{equation}
+```
+where the exact solution $u(x,y) = (x^2 + y^2)(\sqrt{x^2 + y^2} - r_f(x,y))$, the interface is a curved flower line, and the flower function $r_f(x,y)$ reads
+```math
+\begin{equation*}
+	r_f(x,y) = 0.5 + 0.25 \sin(12 \arctan(\frac{y}{x})).
+\end{equation*}
+```
+Our learning algorithm can easily handle such irregular shapes, while finite difference or finite element methods necessitates meticulous treatment of edges and corners.
 
-## Table 6 - DNLM(PINN) Result
-For the results displayed in the Table 6, execute the script `DNLM-2prob-2D-Compensent-flower.py` to generate the corresponding data.
+|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/3bffc9a1-c5c9-4a28-b1fc-651123268f0e)|
+|:--------------------------------------------------------------:|
+| *From left to right: decomposition into two subdomains, true solution $`u(x,y)`$, and its partial derivatives $`\partial_x u(x,y)`$, $`\partial_y u(x,y)`$ |
 
-## Table 6 - DNLM(Ritz) Result
-For the data displayed in the Table 6, execute the script `DNLM-2prob-2D-Compensent-Ritz-flower.py` to generate the corresponding results.
 
-## Figure Generation:
-Utilize MATLAB and execute the script `plot_Solutions_1by1_flower.m` to create the graphical representation associated with the data obtained from the previous steps.
 
-In this investigation, Comsol was employed to construct the mesh within the flower-shaped domain for figure generation. The Comsol files, namely `flower-quarter.mph` and `flower-quarter-out.mph`, were utilized. Possessing the Comsol software is crucial, and selecting `Comsol Multiphysics with MATLAB` is required to run MATLAB.
+|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/2d6b9d5c-ee25-4ed9-b63f-7b63bb13c165)|
+|:--------------------------------------------------------------:|
+| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DN-PINNs on the test dataset.* |
 
+
+But our proposed method, DNLA (PINNs) and DNLA (Ritz), can still work since the variational principle is used.
+
+
+|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/a4ff311e-4fa6-45b0-9dbb-f6395cf9df12)|
+|:--------------------------------------------------------------:|
+| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DNLA (PINNs) on the test dataset.* |
+
+|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/f9a78c6b-516b-46b7-bb34-4ac27d506cce)|
+|:--------------------------------------------------------------:|
+| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DNLA (Ritz) on the test dataset.* |
