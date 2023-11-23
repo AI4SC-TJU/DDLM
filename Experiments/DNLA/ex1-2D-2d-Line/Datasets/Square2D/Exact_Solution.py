@@ -1,0 +1,27 @@
+import torch
+import numpy as np
+
+# exact solution
+def u_Exact_Square2D(x, y):
+    
+    return torch.sin(2*np.pi*x) * (torch.cos(2*np.pi*y) - 1)
+
+# right hand side
+def f_Exact_Square2D(x, y):
+    
+    return 4 * np.pi * np.pi * torch.sin(2*np.pi*x) * (2 * torch.cos(2*np.pi*y) - 1)  
+
+# Dirichlet boundary condition
+def g_Exact_Square2D(x, y):
+    
+    return torch.sin(2*np.pi*x) * (torch.cos(2*np.pi*y) - 1) 
+
+# grad_x of exact solution
+def Gradu_x_Exact_Square2D(x, y):
+
+	return 2*np.pi * torch.cos(2*np.pi*x) * (torch.cos(2*np.pi*y) - 1)  
+
+# grad_y of exact solution	 
+def Gradu_y_Exact_Square2D(x, y):
+
+	return - 2*np.pi * torch.sin(2*np.pi*x) * torch.sin(2*np.pi*y)     
