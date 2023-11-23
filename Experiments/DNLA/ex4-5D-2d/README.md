@@ -19,7 +19,7 @@ To acquire the data represented in the first row of Table 8, execute the script 
 For the results displayed in the Table 8, execute the script `task2-DN-DNLA_PINNs-5D-2prob.py` to generate the corresponding data.
 
 ## Table 8 - DNLM(Ritz) Result
-For the data displayed in the Table 8, execute the script `task3-DN-DNLA_deepRITZ-5D-2prob.py` to generate the corresponding results.
+For the data displayed in the Table 8, execute the script `task3-DN-DNLA_deepRitz-5D-2prob.py` to generate the corresponding results.
 
 Owing to the challenges in visualizing high-dimensional problems, our presentation of results is exclusively through tabular formats in this situation.
 
