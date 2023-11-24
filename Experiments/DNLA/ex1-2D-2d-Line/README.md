@@ -26,11 +26,11 @@ It is noteworthy that this solution reaches local extrema at $(0.5,0.5)$, thereb
 But our proposed method, DNLA (PINNs) and DNLA (Ritz), can still work since the variational principle is used.
 
 
-|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/e2cf07ad-0eb6-4684-a9cf-1feb5919b77f)|
+|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/0bef6490-812e-43ac-bc23-01b1d0a1f004)|
 |:--------------------------------------------------------------:|
 | *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DNLA (PINNs) on the test dataset.* |
 
-|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/83d18ac3-7966-4a95-bb8c-ff590507a8ae)|
+|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/76b05d6d-d4bf-4b4d-852c-d1d6eaad60ca)|
 |:--------------------------------------------------------------:|
 | *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DNLA (Ritz) on the test dataset.* |
 
