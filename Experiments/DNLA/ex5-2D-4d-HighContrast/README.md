@@ -26,29 +26,23 @@ c(x,y) = \left\{
 ```
 Here, we choose $`h^{[0]}=100\cos(100\pi x)\cos(100\pi y)+100xy`$ as the initial guess, and the numerical results using DNLA are depicted as follows. Clearly, our method can facilitate the convergence of outer iterations in the presence of inaccurate flux estimations.
 
-Note that in this case, the extension operator is different from ex3, which is shown as follows
-
-|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/54fcfa6b-2fb9-46ed-86c6-47d725b10313)|
-|:--------------------------------------------------------------:|
-| *Illustration of neural network extension operators for 4 subdomains.* |
-
 In this case, DN-PINNs fails to predict exact solution.
 
-|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/02bbfdc4-9bb0-47d4-a3ad-2e4a9c0bd861)|
+|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/c6c9745a-48cd-4a65-9cea-3dd6758e85d8)|
 |:--------------------------------------------------------------:|
-| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ and the pointwise absolute error using DN-PINNs on the test dataset.* |
+| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DN-PINNs on the test dataset.* |
 
 
 But our proposed method, DNLA (PINNs) and DNLA (Ritz), can still work since the variational principle is used.
 
 
-|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/19d627b8-34ae-4f7d-95ce-799e802f907a)|
+|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/0e171466-8756-4bbe-86cc-a7291e438ea8)|
 |:--------------------------------------------------------------:|
-| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ and the pointwise absolute error using DNLA (PINNs) on the test dataset.* |
+| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DNLA (PINNs) on the test dataset.* |
 
-|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/2d6d9091-9057-4c00-9841-718e15e40892)|
+|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/8341dc5d-c3af-4301-aaac-8174c26dbec9)|
 |:--------------------------------------------------------------:|
-| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ and the pointwise absolute error using DNLA (Ritz) on the test dataset.* |
+| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DNLA (Ritz) on the test dataset.* |
 
 
 
