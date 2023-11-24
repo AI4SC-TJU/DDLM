@@ -15,18 +15,18 @@ where $`u(x,y) = \sin(2\pi x)\sin(2\pi y)`$ and $f(x,y)=$ $8 \pi^2 \sin(2\pi x)\
 
 For the problem with non-trivial flux functions along the interface, it is not guaranteed that iterative solutions using DN-PINNs will converge to the true solution due to issue of inaccurate Dirichlet-to-Neumann map.
 
-|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/8bcfecdb-44b2-4d86-b038-59c533eddc07)|
+|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/bdfbadea-8123-4e94-9be6-ff68b9ead2e2)|
 |:--------------------------------------------------------------:|
-| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ and the pointwise absolute error using DN-PINNs on the test dataset.* |
+| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DN-PINNs on the test dataset.* |
 
 
 However, even though the inaccurate flux predicition on subdomain interfaces remains unresolved when using our methods (see \autoref{Experiments-DNLA-ex3-Overfit-Dirichlet-Subproblem}), the compensated deep Ritz method has enabled the Neumann subproblem to be solved with acceptable accuracy.
 
 
-|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/f7f1f48e-9872-4c0d-9f58-7ff5abe31efc)|
+|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/c70a8708-dd06-468f-a3bf-94a30b74f946)|
 |:--------------------------------------------------------------:|
-| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ and the pointwise absolute error using DNLA (PINNs) on the test dataset.* |
+| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DNLA (PINNs) on the test dataset.* |
 
-|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/149239dd-d892-486a-9e7a-8f11c3318e74)|
+|![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/5ea9d08b-3a18-48bf-9c53-f518bac8832a)|
 |:--------------------------------------------------------------:|
-| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ and the pointwise absolute error using DNLA (Ritz) on the test dataset.* |
+| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DNLA (Ritz) on the test dataset.* |
