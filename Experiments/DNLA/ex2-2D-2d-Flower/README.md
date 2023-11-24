@@ -23,18 +23,18 @@ Our learning algorithm can easily handle such irregular shapes, while finite dif
 The DN-PINNs approach fails to converge to the true solution as the network solution of Dirichlet subproblem is prone to return inaccurate Neumann traces at interface.
 |![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/dd7d6036-70fe-484f-a174-cf05a32c62ac)|
 |:--------------------------------------------------------------:|
-| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ and the pointwise absolute error using DN-PINNs on the test dataset.* |
+| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DN-PINNs on the test dataset.* |
 
 
 In contrast, by solving the Neumann subproblem through our compensated deep Ritz method, the numerical results demonstrate that our DNLA (PINNs) can obtain a satisfactory approximation to the exact solution, which also avoids the meshing procedure that is often challenging for problems with complex interfaces. 
 
 |![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/d20c8753-aa7a-4b39-9701-e782827fa3a3)|
 |:--------------------------------------------------------------:|
-| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ and the pointwise absolute error using DNLA (PINNs) on the test dataset.* |
+| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DNLA (PINNs) on the test dataset.* |
 
 |![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/9313cf33-c7d1-4973-a481-46fb4c000d2c)|
 |:--------------------------------------------------------------:|
-| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ and the pointwise absolute error using DNLA (Ritz) on the test dataset.* |
+| *Iterative solutions $`\hat{u}^{[k]}(x,y)`$ using DNLA (Ritz) on the test dataset.* |
 
 
 
