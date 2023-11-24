@@ -3,29 +3,7 @@ Based on a direct transmission of Dirichlet and Neumann traces along subdomain i
 
 
 
-We consider the Dirichlet-Neumann algorithm for solving Poisson's equations, where the Dirichlet subproblem is solved through the aforementioned PINNs approach.
-
-
-
-
-
-
-
-
-
-On the one hand, the Neumann subproblem within the DN-PINNs strategy is also solved using PINNs, i.e.,
-```math
-\begin{align*}
-    \hat{u}_2^{[k]} = \mathop{\text{arg\,min}}_{u_2} \int_{\Omega_2} | \Delta u_2 + f |^2\,dx + \beta\left(\int_{\textcolor{red}{\Gamma}} \Big|  \frac{\partial u_2}{\partial \mathbf{n}_2} - \textcolor{red}{\frac{\partial \hat{u}^{[k]}_1}{\partial \mathbf{n}_2}} \Big|^2\,ds + \int_{\partial\Omega\cap\partial\Omega_2} |u_2|^2\,ds \right),
-\end{align*}
-```
-where the boundary data (marked in red color) relies on the Neumann trace of Dirichlet subproblem $`\textcolor{red}{\nabla \hat{u}^{[k]}_1 |_\Gamma}`$. On the other hand, the loss function of our proposed method is defined as
-```math
-\begin{align*}
-    	\hat{u}_2^{[k]} = \mathop{\text{arg\,min}}_{\hat{u}_2} \int_{\Omega_2} \Big( \frac12 | \nabla \hat{u}_2 |^2  - f \hat{u}_2 \Big) dx + \int_{\textcolor{blue}{\Omega_1}} \Big( \textcolor{blue}{\nabla \hat{u}_1^{[k]}}\cdot \nabla \hat{u}_2  - f \hat{u}_2 \Big) dx + \beta \int_{\partial\Omega} |\hat{u}_2|^2\,ds,
-\end{align*}
-```
-where the exchanged data (marked in blue color) is represented using the interior solution $`\textcolor{blue}{\nabla \hat{u}^{[k]}_1 |_{\Omega_1}}`$.
+We consider the Dirichlet-Neumann algorithm for solving Poisson's equations, using DN-PINNs and DNLA(PINNs).
 
 
 |![fine-tuning](https://github.com/AI4SC-TJU/DDLM/assets/93070782/1db6cefd-b7bf-460e-87c6-5ff0bd523bca)|
