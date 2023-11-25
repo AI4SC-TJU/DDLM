@@ -11,15 +11,3 @@ where the exact solution $`u(x_1,\cdots,x_5) = \sum\limits_{i=1}^5 \sin (x_i)`$,
 
 ![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/cefd2a7d-d95e-4de0-acb4-a17ee4c4fcca)
 
-# Instructions for Generating Table 8 in Our Revised Manuscript
-## Table 8 - DN-PINNs Result
-To acquire the data represented in the first row of Table 8, execute the script `task1-DN-PINNs-5D-2prob.py`.
-
-## Table 8 - DNLM(PINN) Result
-For the results displayed in the Table 8, execute the script `task2-DN-DNLA_PINNs-5D-2prob.py` to generate the corresponding data.
-
-## Table 8 - DNLM(Ritz) Result
-For the data displayed in the Table 8, execute the script `task3-DN-DNLA_deepRitz-5D-2prob.py` to generate the corresponding results.
-
-Owing to the challenges in visualizing high-dimensional problems, our presentation of results is exclusively through tabular formats in this situation.
-
