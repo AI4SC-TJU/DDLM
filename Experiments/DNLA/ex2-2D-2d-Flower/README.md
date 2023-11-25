@@ -17,7 +17,7 @@ Our learning algorithm can easily handle such irregular shapes, while finite dif
 
 |![image](https://github.com/AI4SC-TJU/DDLM/assets/93070782/00192b1b-7616-4d3f-9ed0-273208b6be0f)|
 |:--------------------------------------------------------------:|
-| *From left to right: decomposition into two subdomains, true solution $`u(x,y)`$, and its partial derivatives $`\partial_x u(x,y)`$, $`\partial_y u(x,y)`$ |
+|From left to right: decomposition into two subdomains, true solution $`u(x,y)`$, and its partial derivatives $`\partial_x u(x,y)`$, $`\partial_y u(x,y)`$|
 
 
 The DN-PINNs approach fails to converge to the true solution as the network solution of Dirichlet subproblem is prone to return inaccurate Neumann traces at interface.
