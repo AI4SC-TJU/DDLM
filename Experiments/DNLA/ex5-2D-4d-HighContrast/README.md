@@ -49,7 +49,7 @@ But our proposed method, DNLA (PINNs) and DNLA (Ritz), can still work since the 
 
 
 
-# Instructions for Generating Table SM1 in Our Supplement Materials
+# Code introduction
 ## Table SM1 - DN-PINNs Result
 To acquire the data represented in the first row of Table SM1, execute the script `task1-DN-PINNs-2D-4prob-highcontrast.py`.
 
