@@ -17,7 +17,7 @@ where the exact solution $u(x,y) = \sin(2\pi x)(\cos(2\pi y)-1)$, and the interf
 
 
 
-# Instructions for Generating RRLA results in our manuscript
+# Code introduction
 ## RR-PINNs Result
 To acquire the data represented in Figure 14 and Figure 15, execute the script `RR-PINNs-2Prob-2D.py`.
 
