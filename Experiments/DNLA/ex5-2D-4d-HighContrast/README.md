@@ -47,18 +47,3 @@ But our proposed method, DNLA (PINNs) and DNLA (Ritz), can still work since the 
 
 
 
-
-
-# Code introduction
-## Table SM1 - DN-PINNs Result
-To acquire the data represented in the first row of Table SM1, execute the script `task1-DN-PINNs-2D-4prob-highcontrast.py`.
-
-## Table SM1 - DNLM(PINN) Result
-For the results displayed in the Table SM1, execute the script `task2-DN-DNLA_PINNs-2D-4prob-highcontrast.py` to generate the corresponding data.
-
-## Table SM1 - DNLM(Ritz) Result
-For the data displayed in the Table SM1, execute the script `task3-DN-DNLA_Ritz-2D-4prob-highcontrast.py` to generate the corresponding results.
-
-## Figure Generation:
-Utilize MATLAB and execute the script `task4_show_results.m` to create the graphical representation associated with the data obtained from the previous steps.
-
